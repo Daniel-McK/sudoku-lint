@@ -1,0 +1,12 @@
+.Cell {
+    width: 48px;
+    height: 48px;
+    border: 1px solid grey;
+    outline: none;
+    line-height: 48px;
+    font-size: 1.5em;
+}
+
+.Cell:focus {
+    background-color: #CFD8DC;
+}
