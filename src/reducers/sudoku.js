@@ -1,7 +1,6 @@
 import * as types from '../actions/types'
 import easyBoard from '../assets/easyboard'
 
-
 var initialState = {};
 initialState.grid = easyBoard.map(row => {
     return row.map(cell => {
@@ -95,7 +94,11 @@ function checkRow (grid, rowIndex){
     for (var c = 0; c < 9; c++){
         let cell = row[c];
         if(cell.value){
-            options.splice(options.indexOf(cell.value), 1);
+            let optionIndex = options.indexOf(cell.value);
+            if (optionIndex === -1){
+                return null;
+            }
+            options.splice(optionIndex, 1);
         }
         else {
             if(lastEmptyCell !== -1){
@@ -104,7 +107,7 @@ function checkRow (grid, rowIndex){
             lastEmptyCell = c;
         }
     }
-    return lastEmptyCell === -1 
+    return lastEmptyCell === -1 || options.length !== 1
         ? null
         : {
             row: rowIndex,
