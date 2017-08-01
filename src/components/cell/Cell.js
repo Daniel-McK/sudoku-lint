@@ -60,11 +60,30 @@ class Cell extends Component {
         }
     }
 
+    getClassName (){
+        if (this.props.suggestion && this.props.suggestion.row === this.props.row && this.props.suggestion.col === this.props.col){
+            return "Cell Hint"; 
+        }
+        else {
+            return "Cell";
+        }
+    }
+
+    getSuggestion (){
+        if(this.props.suggestion){
+            return this.props.suggestion.value;
+        }
+        else {
+            return null;
+        }
+    }
+
     render() {
         var cell = this.props.grid[this.props.row][this.props.col];
         return (
-            <div className="Cell" id={this.getId()} tabIndex="0" onKeyDown={this.handleKey} style={this.getCellStyle(cell)}>
+            <div className={this.getClassName()} id={this.getId()} tabIndex="0" onKeyDown={this.handleKey} style={this.getCellStyle(cell)}>
                 {cell.value}
+                <div className="Suggestion">{this.getSuggestion()}</div>
             </div>
         );
     }

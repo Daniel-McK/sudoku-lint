@@ -10,3 +10,13 @@
 .Cell:focus {
     background-color: #CFD8DC;
 }
+
+.Cell > .Suggestion {
+    display: none;
+    color: #43A047;
+}
+
+.Cell.Hint:hover > .Suggestion {
+    display: inherit;
+}
+
