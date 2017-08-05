@@ -6,7 +6,7 @@ class Puzzle extends Component {
     renderBlock (row, col) {
         var { actions, grid, suggestion } = this.props;
         return(
-            <Block row={row} col={col} actions={actions} grid={grid} suggestion={suggestion}></Block>   
+            <Block row={row} col={col} actions={actions} grid={grid} suggestion={suggestion} key={row + '-' + col}></Block>   
         );
     }
 

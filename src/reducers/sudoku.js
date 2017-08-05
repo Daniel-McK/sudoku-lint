@@ -1,4 +1,3 @@
-import * as types from '../actions/types'
 import easyBoard from '../assets/easyboard'
 import suggestionReducer from './suggestion';
 import gridReducer from './grid';

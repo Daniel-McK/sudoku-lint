@@ -68,7 +68,7 @@ function removeOptionFromCell (cell, option){
     var optionIndex = cell.options.indexOf(option);
     if (optionIndex !== -1){
         cell.options.splice(optionIndex, 1);
-        if (cell.options.length == 1){
+        if (cell.options.length === 1){
             return cell.options[0];
         }
     }

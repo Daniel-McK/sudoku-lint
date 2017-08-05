@@ -6,7 +6,7 @@ class Block extends Component {
     renderCell (row, col) {
         var { actions, grid, suggestion } = this.props;
         return(
-            <Cell row={row} col={col} actions={actions} grid={grid} suggestion={suggestion}></Cell>   
+            <Cell row={row} col={col} actions={actions} grid={grid} suggestion={suggestion} key={row + '-' + col}></Cell>   
         );
     }
 
