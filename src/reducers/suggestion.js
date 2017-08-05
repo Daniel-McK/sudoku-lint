@@ -1,5 +1,7 @@
 import * as types from '../actions/types'
 
+const baseOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
 export default function suggestionReducer (state, action) {
     switch (action.type){
         case types.SHOW_HINT:
@@ -10,13 +12,38 @@ export default function suggestionReducer (state, action) {
 }
 
 function findSuggestion (grid){
-    var suggestion = checkRows(grid);
+    var suggestion = checkAllCells(grid);
     return suggestion;
 }
 
-function checkRows (grid){
+function checkAllCells (grid) {
+
+    var optionsGrid = baseOptions.map(row => {
+        return baseOptions.map(col => {
+            return { 
+                options: baseOptions.slice(), 
+                set: false
+            };
+        });
+    });
+
     for (var r = 0; r < 9; r++){
-        let suggestion = checkRow(grid, r);
+        for (var c = 0; c < 9; c++){
+            var cell = grid[r][c];
+            if (cell.value !== null){
+                let suggestion = removeOptions(grid, optionsGrid, cell.value);
+                if (suggestion){
+                    return suggestion;
+                }
+            }
+        }
+    }
+    return null;
+}
+
+function removeOptions (grid, optionsGrid, option) {
+    for (var r = 0; r < 9; r++){
+        var suggestion = removeOptionFromRow(grid, optionsGrid, r, option);
         if (suggestion){
             return suggestion;
         }
@@ -24,31 +51,26 @@ function checkRows (grid){
     return null;
 }
 
-function checkRow (grid, rowIndex){
-    var row = grid[rowIndex];
-    var options = [1,2,3,4,5,6,7,8,9];
-    var lastEmptyCell = -1;
-    for (var c = 0; c < 9; c++){
-        let cell = row[c];
-        if(cell.value){
-            let optionIndex = options.indexOf(cell.value);
-            if (optionIndex === -1){
-                return null;
+function removeOptionFromRow (grid, optionsGrid, row, value){
+    for (var col = 0; col < 9; col++){
+        var cell = grid[row][col];
+        if (cell.value === null){
+            let option = removeOptionFromCell(optionsGrid[row][col], value);
+            if(option >= 1){
+                return { row, col, value: option };
             }
-            options.splice(optionIndex, 1);
-        }
-        else {
-            if(lastEmptyCell !== -1){
-                return null;
-            }
-            lastEmptyCell = c;
         }
     }
-    return lastEmptyCell === -1 || options.length !== 1
-        ? null
-        : {
-            row: rowIndex,
-            col: lastEmptyCell,
-            value: options[0]
-        };
+    return null;
+}
+
+function removeOptionFromCell (cell, option){
+    var optionIndex = cell.options.indexOf(option);
+    if (optionIndex !== -1){
+        cell.options.splice(optionIndex, 1);
+        if (cell.options.length == 1){
+            return cell.options[0];
+        }
+    }
+    return -1;
 }
