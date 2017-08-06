@@ -18,11 +18,11 @@ function findSuggestion (grid){
 
 function checkAllCells (grid) {
 
-    var optionsGrid = baseOptions.map(row => {
-        return baseOptions.map(col => {
+    var optionsGrid = baseOptions.map((row, rowIndex) => {
+        return baseOptions.map((col, colIndex) => {
             return { 
                 options: baseOptions.slice(), 
-                set: false
+                set: grid[rowIndex]
             };
         });
     });
@@ -31,7 +31,7 @@ function checkAllCells (grid) {
         for (var c = 0; c < 9; c++){
             var cell = grid[r][c];
             if (cell.value !== null){
-                let suggestion = removeOptions(grid, optionsGrid, cell.value);
+                let suggestion = removeOptions(grid, optionsGrid, r, c, cell.value);
                 if (suggestion){
                     return suggestion;
                 }
@@ -41,18 +41,29 @@ function checkAllCells (grid) {
     return null;
 }
 
-function removeOptions (grid, optionsGrid, option) {
-    for (var r = 0; r < 9; r++){
-        var suggestion = removeOptionFromRow(grid, optionsGrid, r, option);
-        if (suggestion){
-            return suggestion;
+function removeOptions (grid, optionsGrid, row, col, option) {
+    var suggestion = removeOptionFromRow(grid, optionsGrid, row, option);
+    if (suggestion === null){
+        suggestion = removeOptionFromCol(grid, optionsGrid, col, option);
+    }
+    return suggestion;
+}
+
+function removeOptionFromRow (grid, optionsGrid, row, value){
+    for (var col = 0; col < 9; col++){
+        var cell = grid[row][col];
+        if (cell.value === null){
+            let option = removeOptionFromCell(optionsGrid[row][col], value);
+            if(option >= 1){
+                return { row, col, value: option };
+            }
         }
     }
     return null;
 }
 
-function removeOptionFromRow (grid, optionsGrid, row, value){
-    for (var col = 0; col < 9; col++){
+function removeOptionFromCol (grid, optionsGrid, col, value){
+    for (var row = 0; row < 9; row++){
         var cell = grid[row][col];
         if (cell.value === null){
             let option = removeOptionFromCell(optionsGrid[row][col], value);
